@@ -17,17 +17,16 @@
             
                 // Creating scene
                 var scene = new THREE.Scene();
-                //                            scene.add(dae);
             
                 // Camera
                 var camera = new THREE.PerspectiveCamera(45, RENDER_WIDTH / RENDER_HEIGHT, 0.1, 10000);
-                camera.position.z = 300;
-                camera.lookAt( scene.position );
+                camera.position.set(100, 10, 100);
                 scene.add(camera);
+                
                 controls = new THREE.FirstPersonControls(camera);
-                controls.movementSpeed = 1000;
-                controls.lookSpeed = 0.125;
-                controls.lookVertical = true;
+                controls.movementSpeed = 500;
+                controls.lookSpeed = 0.225;
+                controls.lookVertical = false;
             
                 // Sphere
                 var sphereMaterial = new THREE.MeshLambertMaterial({
@@ -42,6 +41,7 @@
                             
                 var loader = new THREE.ColladaLoader();
                 var dae;
+                loader.options.convertUpAxis = true;
                 loader.load('1.dae', function ( collada ) {
 
                     dae = collada.scene;
