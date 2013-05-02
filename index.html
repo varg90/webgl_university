@@ -10,38 +10,26 @@
         </style>
         <script type="text/javascript" src="js/Three.js"></script>
         <script type="text/javascript" src="js/ColladaLoader.js"></script>
+        <script type="text/javascript" src="js/Raycaster.js"></script>
         <script type="text/javascript">
-            var controls;
             window.onload = function() {
                 var RENDER_WIDTH = window.innerWidth, RENDER_HEIGHT = window.innerHeight;
             
-                // Creating scene
                 var scene = new THREE.Scene();
             
-                // Camera
                 var camera = new THREE.PerspectiveCamera(45, RENDER_WIDTH / RENDER_HEIGHT, 0.1, 10000);
-                camera.position.set(100, 100, 100);
+                camera.position.set(100, 50, 100);
                 scene.add(camera);
                 
-                controls = new THREE.FirstPersonControls(camera);
+                var controls = new THREE.FirstPersonControls(camera);
                 controls.movementSpeed = 200;
                 controls.lookSpeed = 0.225;
                 controls.lookVertical = false;
             
-                // Sphere
-                var sphereMaterial = new THREE.MeshLambertMaterial({
-                    color: 0x00ff00
-                });
-                var radius = 50, segments = 16, rings = 16;
-                var sphere = new THREE.Mesh(
-                new THREE.SphereGeometry(radius, segments, rings),
-                sphereMaterial);
-                scene.add(sphere);
-                            
                 var loader = new THREE.ColladaLoader();
                 var dae;
                 loader.options.convertUpAxis = true;
-                loader.load('1.dae', function ( collada ) {
+                loader.load('n.dae', function ( collada ) {
 
                     dae = collada.scene;
 
@@ -49,6 +37,33 @@
                     dae.updateMatrix();
                     scene.add(dae);
                 });
+                
+                // create the sphere's material
+                var sphereMaterial =
+                    new THREE.MeshLambertMaterial(
+                {
+                    color: 0xCC0000
+                });
+    
+                // set up the sphere vars
+                var radius = 50,
+                segments = 16,
+                rings = 16;
+
+                // create a new mesh with
+                // sphere geometry - we will cover
+                // the sphereMaterial next!
+                var sphere = new THREE.Mesh(
+
+                new THREE.SphereGeometry(
+                radius,
+                segments,
+                rings),
+
+                sphereMaterial);
+
+                // add the sphere to the scene
+                scene.add(sphere);
             
             
                 // Light
@@ -69,15 +84,17 @@
             
                 var clock = new THREE.Clock();
                 setInterval(function() {
-                    checkCollisions();
+    var vector = sphere.position.clone();
+                   ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+//                    var intersects = ray.intersectObjects( scene.children, true );
+//                    if (intersects){
+//                        alert();
+//                    }
                     var delta = clock.getDelta();
                     controls.update(delta);
                     renderer.render(scene, camera);
                 }, 1);
                 
-                function checkCollisions(){
-                    
-                }
             };
         </script>
     </head>
