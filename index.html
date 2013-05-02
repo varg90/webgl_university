@@ -11,8 +11,10 @@
         <script type="text/javascript" src="js/Three.js"></script>
         <script type="text/javascript" src="js/ColladaLoader.js"></script>
         <script type="text/javascript" src="js/Raycaster.js"></script>
+        <script type="text/javascript" src="js/Detector.js"></script>
         <script type="text/javascript">
             window.onload = function() {
+                if ( !Detector.webgl ) alert('Ваш браузер не поддерживает технологию WebGL');
                 var RENDER_WIDTH = window.innerWidth, RENDER_HEIGHT = window.innerHeight;
             
                 var scene = new THREE.Scene();
@@ -84,12 +86,12 @@
             
                 var clock = new THREE.Clock();
                 setInterval(function() {
-    var vector = sphere.position.clone();
-                   ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-//                    var intersects = ray.intersectObjects( scene.children, true );
-//                    if (intersects){
-//                        alert();
-//                    }
+                    //    var vector = sphere.position.clone();
+                    //                   ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+                    //                    var intersects = ray.intersectObjects( scene.children, true );
+                    //                    if (intersects){
+                    //                        alert();
+                    //                    }
                     var delta = clock.getDelta();
                     controls.update(delta);
                     renderer.render(scene, camera);
