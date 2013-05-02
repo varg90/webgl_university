@@ -1,97 +1,79 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
     <head>
-        <title>University</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            #container {
+                width: 400px;
+                height: 300px;
+            }
+        </style>
+        <script type="text/javascript" src="js/Three.js"></script>
+        <script type="text/javascript" src="js/ColladaLoader.js"></script>
+        <script type="text/javascript">
+            var controls;
+            window.onload = function() {
+                var RENDER_WIDTH = window.innerWidth, RENDER_HEIGHT = window.innerHeight;
+            
+                // Creating scene
+                var scene = new THREE.Scene();
+                //                            scene.add(dae);
+            
+                // Camera
+                var camera = new THREE.PerspectiveCamera(45, RENDER_WIDTH / RENDER_HEIGHT, 0.1, 10000);
+                camera.position.z = 300;
+                camera.lookAt( scene.position );
+                scene.add(camera);
+                controls = new THREE.FirstPersonControls(camera);
+                controls.movementSpeed = 1000;
+                controls.lookSpeed = 0.125;
+                controls.lookVertical = true;
+            
+                // Sphere
+                var sphereMaterial = new THREE.MeshLambertMaterial({
+                    color: 0x00ff00
+                });
+                var radius = 50, segments = 16, rings = 16;
+                var sphere = new THREE.Mesh(
+                new THREE.SphereGeometry(radius, segments, rings),
+                sphereMaterial
+            );
+                scene.add(sphere);
+                            
+                var loader = new THREE.ColladaLoader();
+                var dae;
+                loader.load('1.dae', function ( collada ) {
+
+                    dae = collada.scene;
+
+                    dae.scale.x = dae.scale.y = dae.scale.z = 10;
+                    dae.updateMatrix();
+                    scene.add(dae);
+                });
+            
+            
+                // Light
+                scene.add(new THREE.AmbientLight(0x333333));
+                var light = new THREE.PointLight(0xffffff, 0.9);
+                light.position.set(50, 200, 50);
+                scene.add(light);
+            
+                var container = document.getElementById('container');
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize(RENDER_WIDTH, RENDER_HEIGHT);
+                renderer.setClearColorHex(0x000000, 1);
+                container.appendChild(renderer.domElement);
+            
+                var clock = new THREE.Clock();
+                setInterval(function() {
+                    var delta = clock.getDelta();
+                    controls.update(delta);
+                    renderer.render(scene, camera);
+                }, 1);
+            };
+        </script>
     </head>
     <body>
-
-        <script src="js/Three.js"></script>
-        <script src="js/ColladaLoader.js"></script>
-        <script src="js/Detector.js"></script>
-        <script src="js/Stats.js"></script>
-        <script src="js/movement.js"></script>
-
-        <script type="text/javascript">
-
-            if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-            var container, stats;
-
-            var camera, scene, renderer, objects;
-            var particleLight, pointLight;
-            var dae, skin;
-
-            var loader = new THREE.ColladaLoader();
-            loader.options.convertUpAxis = true;
-            
-            loader.load( 'university.dae', function colladaReady( collada ) {
-                dae = collada.scene;
-                dae.scale.x = dae.scale.y = dae.scale.z = 500;
-                dae.updateMatrix();
-        
-                init();
-                animate();
-            } );
-            
-            function init() {
-
-                container = document.createElement( 'div' );
-                document.body.appendChild( container );
-
-                scene = new THREE.Scene();
-
-                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-                camera.position.set( 40, 0, 30 );
-                scene.add( camera );
-
-                controls = new THREE.TrackballControls( camera );
-                controls.target.set( 0, 0, 0 );
-                
-                // Add the COLLADA
-
-                scene.add( dae );
-
-                particleLight = new THREE.Mesh( 
-                new THREE.SphereGeometry( 4, 8, 8 ), 
-                new THREE.MeshBasicMaterial( { color: 0xffffff } ) 
-            );
-                scene.add( particleLight );
-
-                // Lights
-
-                scene.add( new THREE.AmbientLight( 0xcccccc ) );
-
-                pointLight = new THREE.PointLight( 0xaaaaaa, 4 );
-                pointLight.position = particleLight.position;
-                scene.add( pointLight );
-
-                renderer = new THREE.WebGLRenderer();
-                renderer.setSize( window.innerWidth, window.innerHeight );
-
-                container.appendChild( renderer.domElement );
-
-                stats = new Stats();
-                stats.domElement.style.position = 'absolute';
-                stats.domElement.style.top = '0px';
-                container.appendChild( stats.domElement );
-
-            }
-
-            camera.lookAt( scene.position );
-            function animate() {
-                requestAnimationFrame( animate );
-
-                render();
-                stats.update();
-            }
-
-            function render() {
-                renderer.render( scene, camera );
-            }
-
-        </script>
+        <div id="container"></div>
     </body>
 </html>
