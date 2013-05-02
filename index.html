@@ -20,11 +20,11 @@
             
                 // Camera
                 var camera = new THREE.PerspectiveCamera(45, RENDER_WIDTH / RENDER_HEIGHT, 0.1, 10000);
-                camera.position.set(100, 10, 100);
+                camera.position.set(100, 100, 100);
                 scene.add(camera);
                 
                 controls = new THREE.FirstPersonControls(camera);
-                controls.movementSpeed = 500;
+                controls.movementSpeed = 200;
                 controls.lookSpeed = 0.225;
                 controls.lookVertical = false;
             
@@ -35,8 +35,7 @@
                 var radius = 50, segments = 16, rings = 16;
                 var sphere = new THREE.Mesh(
                 new THREE.SphereGeometry(radius, segments, rings),
-                sphereMaterial
-            );
+                sphereMaterial);
                 scene.add(sphere);
                             
                 var loader = new THREE.ColladaLoader();
@@ -57,6 +56,10 @@
                 var light = new THREE.PointLight(0xffffff, 0.9);
                 light.position.set(50, 200, 50);
                 scene.add(light);
+                
+                var light = new THREE.PointLight(0xffffff, 0.9);
+                light.position.set(5000, 200, -5000);
+                scene.add(light);
             
                 var container = document.getElementById('container');
                 var renderer = new THREE.WebGLRenderer();
@@ -66,10 +69,15 @@
             
                 var clock = new THREE.Clock();
                 setInterval(function() {
+                    checkCollisions();
                     var delta = clock.getDelta();
                     controls.update(delta);
                     renderer.render(scene, camera);
                 }, 1);
+                
+                function checkCollisions(){
+                    
+                }
             };
         </script>
     </head>
