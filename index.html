@@ -31,7 +31,7 @@
                 var loader = new THREE.ColladaLoader();
                 var dae;
                 loader.options.convertUpAxis = true;
-                loader.load('n.dae', function ( collada ) {
+                loader.load('university.dae', function ( collada ) {
 
                     dae = collada.scene;
 
@@ -40,34 +40,6 @@
                     scene.add(dae);
                 });
                 
-                // create the sphere's material
-                var sphereMaterial =
-                    new THREE.MeshLambertMaterial(
-                {
-                    color: 0xCC0000
-                });
-    
-                // set up the sphere vars
-                var radius = 50,
-                segments = 16,
-                rings = 16;
-
-                // create a new mesh with
-                // sphere geometry - we will cover
-                // the sphereMaterial next!
-                var sphere = new THREE.Mesh(
-
-                new THREE.SphereGeometry(
-                radius,
-                segments,
-                rings),
-
-                sphereMaterial);
-
-                // add the sphere to the scene
-                scene.add(sphere);
-            
-            
                 // Light
                 scene.add(new THREE.AmbientLight(0x333333));
                 var light = new THREE.PointLight(0xffffff, 0.9);
@@ -86,12 +58,6 @@
             
                 var clock = new THREE.Clock();
                 setInterval(function() {
-                    //    var vector = sphere.position.clone();
-                    //                   ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-                    //                    var intersects = ray.intersectObjects( scene.children, true );
-                    //                    if (intersects){
-                    //                        alert();
-                    //                    }
                     var delta = clock.getDelta();
                     controls.update(delta);
                     renderer.render(scene, camera);
